@@ -28,7 +28,7 @@ const fetchPost = async (id: string) => {
     return postSnap.data()
 }
 
-export default async function page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
     const { id } = params
     const post = await fetchPost(id)
 
