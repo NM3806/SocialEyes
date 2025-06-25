@@ -2,35 +2,29 @@ import React from 'react'
 import Sidebar from "@/components/Sidebar";
 import SignUpPrompt from "@/components/SignUpPrompt";
 import Widgets from "@/components/Widgets";
-import { ArrowLeftIcon, ArrowUpTrayIcon, ChartBarIcon, ChatBubbleOvalLeftEllipsisIcon, EllipsisHorizontalIcon, HeartIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ArrowUpTrayIcon, ChartBarIcon, 
+    ChatBubbleOvalLeftEllipsisIcon, EllipsisHorizontalIcon, HeartIcon
+} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PostHeader } from '@/components/Post';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 
-
 interface Comment {
-    name: string
-    text: string
-    username: string
+    name: string;
+    text: string;
+    username: string;
 }
 
 const fetchPost = async (id: string) => {
     const postRef = doc(db, "posts", id);
     const postSnap = await getDoc(postRef);
+    return postSnap.data();
+};
 
-    return postSnap.data()
-}
-
-interface PageProps {
-    params: {
-        id: string
-    }
-}
-
-export default async function Page({ params }: any) {
-    const { id } = await params;
+export default async function Page(props: any) {
+    const { id } = (await props).params;
     const post = await fetchPost(id);
 
     return (
@@ -41,8 +35,8 @@ export default async function Page({ params }: any) {
                     <div className='flex-grow max-w-xl border-x border-gray-100'>
 
                         <div className='py-4 px-3 border-b-2 border-gray-100 font-bold 
-                            text-lg sm:text-xl sticky top-0 z-11 bg-opacity-80 backdrop-blur-sm
-                            flex items-center'>
+                text-lg sm:text-xl sticky top-0 z-11 bg-opacity-80 backdrop-blur-sm
+                flex items-center'>
                             <Link href="/">
                                 <ArrowLeftIcon className='w-5 h-5 mr-10' />
                             </Link>
@@ -61,13 +55,13 @@ export default async function Page({ params }: any) {
                                     />
                                     <div className='flex flex-col'>
                                         <span className='font-bold inline-block whitespace-nowrap overflow-hidden
-                                        text-ellipsis max-w-[60px] min-[400px]:max-w-[100px] min-[500px]:max-w-[140px]
-                                        sm:max-w-[160px]'>
+                        text-ellipsis max-w-[60px] min-[400px]:max-w-[100px] min-[500px]:max-w-[140px]
+                        sm:max-w-[160px]'>
                                             {post?.name}
                                         </span>
                                         <span className='text-gray-400 inline-block whitespace-nowrap overflow-hidden
-                                        text-ellipsis max-w-[60px] min-[400px]:max-w-[100px] min-[500px]:max-w-[140px]
-                                        sm:max-w-[160px]'>
+                        text-ellipsis max-w-[60px] min-[400px]:max-w-[100px] min-[500px]:max-w-[140px]
+                        sm:max-w-[160px]'>
                                             @{post?.username}
                                         </span>
                                     </div>
@@ -78,7 +72,7 @@ export default async function Page({ params }: any) {
                         </div>
 
                         <div className='border-b border-gray-100 p-3'>
-                            <span className='font-bold'>{post?.likes.length}</span> Likes
+                            <span className='font-bold'>{post?.likes?.length ?? 0}</span> Likes
                         </div>
 
                         <div className='flex justify-evenly border-b border-gray-100 p-3 text-gray-500'>
@@ -89,8 +83,9 @@ export default async function Page({ params }: any) {
                         </div>
 
                         {
-                            post?.comments.map((comment: Comment) => (
+                            post?.comments?.map((comment: Comment, index: number) => (
                                 <Comment
+                                    key={index}
                                     name={comment.name}
                                     username={comment.username}
                                     text={comment.text}
@@ -103,13 +98,13 @@ export default async function Page({ params }: any) {
                 <SignUpPrompt />
             </div>
         </>
-    )
+    );
 }
 
 interface CommentProps {
-    name: string
-    username: string
-    text: string
+    name: string;
+    username: string;
+    text: string;
 }
 
 function Comment({ name, username, text }: CommentProps) {
@@ -127,5 +122,5 @@ function Comment({ name, username, text }: CommentProps) {
                 <ArrowUpTrayIcon className='w-5 h-5 cursor-not-allowed' />
             </div>
         </div>
-    )
+    );
 }
