@@ -47,7 +47,9 @@ A full-stack, responsive social media web app built with **React**, **Next.js 15
 
 ## 📸 Screenshots
 
-*(Add screenshots here if you have them)*
+![image](https://github.com/user-attachments/assets/79eecc56-96a1-4a93-bee7-9df3733ba55f)
+
+![image](https://github.com/user-attachments/assets/c779e38c-aa27-494b-8b4c-1eed8f16e587)
 
 ---
 
