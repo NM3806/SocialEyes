@@ -9,11 +9,6 @@ import { PostHeader } from '@/components/Post';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 
-interface PageProps {
-    params: {
-        id: string
-    }
-}
 
 interface Comment {
     name: string
@@ -28,9 +23,15 @@ const fetchPost = async (id: string) => {
     return postSnap.data()
 }
 
-export default async function Page({ params }: PageProps) {
-    const { id } = params
-    const post = await fetchPost(id)
+interface PageProps {
+    params: {
+        id: string
+    }
+}
+
+export default async function Page({ params }: any) {
+    const { id } = await params;
+    const post = await fetchPost(id);
 
     return (
         <>

@@ -15,6 +15,7 @@ export default function SignUpModal() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const isPasswordValid = password.length >= 6;
 
     // const [isOpen, setIsOpen] = useState(false);
 
@@ -32,7 +33,7 @@ export default function SignUpModal() {
     const dispatch: AppDispatch = useDispatch();
 
     async function handleSignUp() {
-        console.log({ email, password });
+
         const userCredentials = await createUserWithEmailAndPassword(
             auth,
             email,
@@ -52,10 +53,10 @@ export default function SignUpModal() {
     }
 
     // Log In as Guest
-        async function handleGuestLogIn() {
-            await signInWithEmailAndPassword(auth, "guest@gmail.com", "123456")
-        }
-    
+    async function handleGuestLogIn() {
+        await signInWithEmailAndPassword(auth, "guest@gmail.com", "123456")
+    }
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -117,20 +118,29 @@ export default function SignUpModal() {
                                 ps-3 rounded-sm focus:border-amber-400 transition'
                             />
 
-                            <div className='w-full h-14 border border-gray-200 outline-none
-                            rounded-sm focus-within:border-amber-400 transition overflow-hidden
-                            flex items-center justify-between pe-3'>
+                            <div>
+                                <div className={`pb-2 text-sm font-semibold ${isPasswordValid ? 'text-green-500' : 'text-red-500'}`}>
+                                    {isPasswordValid ? 'Password looks good!' : 'Password must be at least 6 characters'}
+                                </div>
 
-                                <input type={showPassword ? "text" : "password"}
-                                    placeholder='Password'
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    value={password}
-                                    className='w-full h-full ps-3 outline-none'
-                                />
+                                <div className={`w-full h-14 border ${isPasswordValid ? 'border-green-400' : 'border-red-400'} 
+  outline-none rounded-sm focus-within:border-amber-400 transition overflow-hidden 
+  flex items-center justify-between pe-3`}>
 
-                                <div onClick={() => setShowPassword(!showPassword)}
-                                    className='w-7 h-7 text-gray-400 cursor-pointer'>
-                                    {showPassword ? <EyeSlashIcon className='hover:' /> : <EyeIcon />}
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder='Password'
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={password}
+                                        className='w-full h-full ps-3 outline-none'
+                                    />
+
+                                    <div
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className='w-7 h-7 text-gray-400 cursor-pointer'
+                                    >
+                                        {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                                    </div>
                                 </div>
                             </div>
 
